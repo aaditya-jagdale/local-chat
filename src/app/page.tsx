@@ -14,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 interface Message {
   id: string;
@@ -539,14 +540,19 @@ export default function ModernChatInterface() {
               >
                 <div className={`flex justify-start`}>
                   {/* Message */}
-                  <div className={`rounded-lg px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap max-w-3xl ${
+                  <div className={`rounded-lg px-4 py-3 text-sm leading-relaxed max-w-3xl ${
                     message.role === 'user' 
-                      ? 'bg-gray-200 text-gray-900' 
-                      : 'bg-white border border-gray-200 text-gray-900 shadow-sm'
+                      ? 'bg-gray-200 text-gray-900 whitespace-pre-wrap' 
+                      : ''
                   }`}>
-                    {message.content}
-                    {message.role === 'assistant' && message.content === '' && isSending && (
-                      <span className="text-gray-400 italic">Generating response...</span>
+                    {message.role === 'assistant' ? (
+                      message.content ? (
+                        <MarkdownRenderer content={message.content} />
+                      ) : isSending ? (
+                        <span className="text-gray-400 italic">Generating response...</span>
+                      ) : null
+                    ) : (
+                      message.content
                     )}
                   </div>
                 </div>
